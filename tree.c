@@ -5,18 +5,18 @@
 #define true 1
 #define false 0
 
-struct _node {
+struct node_t {
   char data;
-  struct _node *left;
-  struct _node *right;
+  struct node_t *left;
+  struct node_t *right;
 };
 
-struct _tree {
-  struct _node *root;
+struct tree_t {
+  struct node_t *root;
 };
 
-struct _node* node_init(char c) {
-  struct _node *node = malloc(sizeof(struct _node));
+struct node_t* node_init(char c) {
+  struct node_t *node = malloc(sizeof(struct node_t));
   node->data = c;
   node->left = NULL;
   node->right = NULL;
@@ -24,12 +24,12 @@ struct _node* node_init(char c) {
 }
 
 b_tree tree_init(void) {
-  struct _tree *tree = malloc(sizeof(struct _tree));
+  struct tree_t *tree = malloc(sizeof(struct tree_t));
   tree->root = NULL;
   return tree;
 }
 
-static void free_impl(struct _node *node) {
+static void free_impl(struct node_t *node) {
 
   if (node->left) {
     free_impl(node->left);
@@ -43,15 +43,15 @@ static void free_impl(struct _node *node) {
 }
 
 void tree_free(b_tree b) {
-  struct _tree *tree = b;
+  struct tree_t *tree = b;
   if (tree->root) {
     free_impl(tree->root);
   }
   free(tree);
 }
 
-static void add_impl(struct _node **node, char c) {
-  struct _node *this = *node;
+static void add_impl(struct node_t **node, char c) {
+  struct node_t *this = *node;
   if (this == NULL) {
     *node = node_init(c);
   } else if (c < this->data) {
@@ -64,11 +64,11 @@ static void add_impl(struct _node **node, char c) {
 }
 
 void tree_add(b_tree b, char c) {
-  struct _tree *tree = b;
+  struct tree_t *tree = b;
   add_impl(&tree->root, c);
 }
 
-static int size_impl(struct _node *node) {
+static int size_impl(struct node_t *node) {
   if (node) {
     int left = size_impl(node->left);
     int right = size_impl(node->right);
@@ -79,11 +79,11 @@ static int size_impl(struct _node *node) {
 }
 
 int tree_size(b_tree b) {
-  struct _tree *tree = b;
+  struct tree_t *tree = b;
   return size_impl(tree->root);
 }
 
-static int8_t contains_impl(struct _node *node, char c) {
+static int8_t contains_impl(struct node_t *node, char c) {
   if (!node) {
     return false;
   } else if (c < node->data) {
@@ -96,10 +96,10 @@ static int8_t contains_impl(struct _node *node, char c) {
 }
 
 int8_t tree_contains(b_tree b, char c) {
-  return contains_impl(((struct _tree*)b)->root, c);
+  return contains_impl(((struct tree_t*)b)->root, c);
 }
 
-static void print_impl(struct _node *node, int depth) {
+static void print_impl(struct node_t *node, int depth) {
   if (node) {
     int i = depth;
     while (i--) {
@@ -112,10 +112,10 @@ static void print_impl(struct _node *node, int depth) {
 }
 
 void tree_print(b_tree b) {
-  print_impl(((struct _tree*)b)->root, 0);
+  print_impl(((struct tree_t*)b)->root, 0);
 }
 
-static struct _node* min_impl(struct _node *node) {
+static struct node_t* min_impl(struct node_t *node) {
   if (!node) {
     return NULL;
   } else if (!node->left) {
@@ -126,7 +126,7 @@ static struct _node* min_impl(struct _node *node) {
 }
 
 char tree_min(b_tree b) {
-  struct _node *min = min_impl(((struct _tree*)b)->root);
+  struct node_t *min = min_impl(((struct tree_t*)b)->root);
   if (min) {
     return min->data;
   } else {
@@ -134,8 +134,8 @@ char tree_min(b_tree b) {
   }
 }
 
-static void remove_impl(struct _node **node, char c) {
-  struct _node *this = *node;
+static void remove_impl(struct node_t **node, char c) {
+  struct node_t *this = *node;
   if (this == NULL) {
     return; // element not in tree
   } else if (c < this->data) {
@@ -147,7 +147,7 @@ static void remove_impl(struct _node **node, char c) {
     this->data = min_impl(this->right)->data;
     remove_impl(&this->right, c);
   } else {
-    struct _node *tmp = this;
+    struct node_t *tmp = this;
     if (this->left) {
       *node = this->left;
     } else {
@@ -158,11 +158,11 @@ static void remove_impl(struct _node **node, char c) {
 }
 
 void tree_remove(b_tree b, char c) {
-  struct _tree *tree = b;
+  struct tree_t *tree = b;
   remove_impl(&tree->root, c);
 }
 
-static struct _node* max_impl(struct _node *node) {
+static struct node_t* max_impl(struct node_t *node) {
   if (!node) {
     return NULL;
   } else if (!node->right) {
@@ -173,7 +173,7 @@ static struct _node* max_impl(struct _node *node) {
 }
 
 char tree_max(b_tree b) {
-  struct _node *max = max_impl(((struct _tree*)b)->root);
+  struct node_t *max = max_impl(((struct tree_t*)b)->root);
   if (max) {
     return max->data;
   } else {

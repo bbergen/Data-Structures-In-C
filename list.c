@@ -9,29 +9,29 @@
 #define true 1
 #define false 0
 
-struct _node {
+struct node_t {
   char data;
-  struct _node *next;
+  struct node_t *next;
 };
 
-struct _list {
-  struct _node *head;
+struct list_t {
+  struct node_t *head;
 };
 
 b_list list_init(void) {
-  struct _list *list = malloc(sizeof(struct _list));
+  struct list_t *list = malloc(sizeof(struct list_t));
   list->head = NULL;
   return list;
 }
 
-static struct _node* node_init(char c) {
-  struct _node *node = malloc(sizeof(struct _node));
+static struct node_t* node_init(char c) {
+  struct node_t *node = malloc(sizeof(struct node_t));
   node->data = c;
   node->next = NULL;
   return node;
 }
 
-static void list_free_impl(struct _node *n) {
+static void list_free_impl(struct node_t *n) {
   if (n) {
     list_free_impl(n->next);
     free(n);
@@ -39,7 +39,7 @@ static void list_free_impl(struct _node *n) {
 }
 
 void list_free(b_list b) {
-  struct _list *list = b;
+  struct list_t *list = b;
   if (list) {
     list_free_impl(list->head);
     free(list);
@@ -47,18 +47,18 @@ void list_free(b_list b) {
 }
 
 void list_add_front(b_list b, char c) {
-  struct _list *list = b;
-  struct _node *node = node_init(c);
+  struct list_t *list = b;
+  struct node_t *node = node_init(c);
   node->next = list->head;
   list->head = node;
 }
 
 void list_add_back(b_list b, char c) {
-  struct _list *list = b;
+  struct list_t *list = b;
   if (list_empty(b)) {
     list->head = node_init(c);
   } else {
-    struct _node *current = list->head;
+    struct node_t *current = list->head;
     while (current->next) {
       current = current->next;
     }
@@ -66,23 +66,23 @@ void list_add_back(b_list b, char c) {
   }
 }
 
-static int size(struct _node *n) {
+static int size(struct node_t *n) {
   return n ? 1 + size(n->next) : 0;
 }
 
 int list_size(b_list b) {
-  struct _list *list = b;
+  struct list_t *list = b;
   return size(list->head);
 }
 
-static void reverse(struct _node *head, int start, int end) {
+static void reverse(struct node_t *head, int start, int end) {
   // base case
   if (start >= end) {
     return;
   }
 
   // first we navigate to our start
-  struct _node *current = head;
+  struct node_t *current = head;
   int i;
   for (i = 0; i < start; i++) {
     current = current->next;
@@ -107,29 +107,29 @@ static void reverse(struct _node *head, int start, int end) {
 }
 
 void list_reverse_ip(b_list b) {
-  reverse(((struct _list*)b)->head, 0, list_size(b) - 1);
+  reverse(((struct list_t*)b)->head, 0, list_size(b) - 1);
 }
 
 b_list list_reverse(b_list b) {
-  struct _list *old_list = b;
-  struct _list *new_list = list_init();
+  struct list_t *oldlist_t = b;
+  struct list_t *newlist_t = list_init();
 
-  if (!list_empty(old_list)) {
-    struct _node *current = old_list->head;
+  if (!list_empty(oldlist_t)) {
+    struct node_t *current = oldlist_t->head;
     while(current) {
       if (current->data) {
-        list_add_front(new_list, current->data);
+        list_add_front(newlist_t, current->data);
         current = current->next;
       }
     }
   }
 
-  return new_list;
+  return newlist_t;
 }
 
 void list_print(b_list b) {
-  struct _list *list = b;
-  struct _node *node = list->head;
+  struct list_t *list = b;
+  struct node_t *node = list->head;
   printf("[");
   if (!list_empty(b)) {
     while (node) {
@@ -147,7 +147,7 @@ int8_t list_empty(b_list b) {
   return list_size(b) == 0;
 }
 
-static int8_t contains(struct _node *n, char c) {
+static int8_t contains(struct node_t *n, char c) {
   if (n == NULL) {
     return false;
   } else if (n->data == c) {
@@ -158,15 +158,15 @@ static int8_t contains(struct _node *n, char c) {
 }
 
 int8_t list_contains(b_list b, char c) {
-  struct _list *list = b;
+  struct list_t *list = b;
   return contains(list->head, c);
 }
 
 void list_remove(b_list b, int n) {
-  struct _list *list = b;
+  struct list_t *list = b;
   if (!list_empty(list) && n >= 0) {
-    struct _node *current = list->head;
-    struct _node *tmp;
+    struct node_t *current = list->head;
+    struct node_t *tmp;
     if (n == 0) {
       // remove at head
       list->head = current->next; 

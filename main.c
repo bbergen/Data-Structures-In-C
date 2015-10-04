@@ -9,7 +9,17 @@
 #include "tree.h"
 
 int main(int argc, char **argv) {
-  
+ 
+  // List Testing
+  b_list list = list_init();
+  list_add_front(list, '5');
+  list_add_front(list, 'G');
+  list_add_back(list,'B');
+  list_print(list);
+  list_reverse_ip(list);
+  list_print(list);
+
+  // Tree Testing
   b_tree tree = tree_init();
   tree_add(tree, '5');
   tree_add(tree, '1');
@@ -17,22 +27,10 @@ int main(int argc, char **argv) {
   tree_add(tree, '9');
 
   printf("Tree Size: %d\n", tree_size(tree));
-  if (tree_contains(tree, '1')) {
-    printf("Contains 1!\n");
-  }
-  if (!tree_contains(tree, '$')) {
-    printf("Doesnt contain $\n");
-  }
-
-  printf("Largest: %c\n", tree_max(tree));
-  printf("Smallest: %c\n", tree_min(tree));
-
   tree_print(tree);
-
   printf("Removing '1'\n");
   tree_remove(tree, '1');
   tree_print(tree);
-
   tree_free(tree);
 
   return 0;

@@ -6,24 +6,24 @@
 #include "stdio.h"
 #include "stack.h"
 
-struct _node {
+struct node_t {
   char data;
-  struct _node *next;
+  struct node_t *next;
 };
 
-struct _stack {
-  struct _node *top;
+struct stack_t {
+  struct node_t *top;
 };
 
-static struct _node* node_init(char c) {
-  struct _node *node = malloc(sizeof(struct _node));
+static struct node_t* node_init(char c) {
+  struct node_t *node = malloc(sizeof(struct node_t));
   node->data = c;
   node->next = NULL;
   return node;
 }
 
 b_stack stack_init(void) {
-  struct _stack *stack = malloc(sizeof(struct _stack));
+  struct stack_t *stack = malloc(sizeof(struct stack_t));
   stack->top = NULL;
   return stack;
 }
@@ -36,14 +36,14 @@ void stack_free(b_stack b) {
 }
 
 void stack_push(b_stack b, char c) {
-  struct _stack *stack = b;
-  struct _node *node = node_init(c);
+  struct stack_t *stack = b;
+  struct node_t *node = node_init(c);
   node->next = stack->top;
   stack->top = node;
 }
 
 char stack_top(b_stack b) {
-  struct _stack *stack = b;
+  struct stack_t *stack = b;
   if (!stack_empty(stack)) {
     return stack->top->data;
   } else {
@@ -53,20 +53,20 @@ char stack_top(b_stack b) {
 
 void stack_pop(b_stack b) {
   if (!stack_empty(b)) {
-    struct _stack *stack = b;
-    struct _node *node = stack->top;
+    struct stack_t *stack = b;
+    struct node_t *node = stack->top;
     stack->top = node->next;
     free(node);
   }
 }
 
 int8_t stack_empty(b_stack b) {
-  return ((struct _stack*)b)->top == NULL;
+  return ((struct stack_t*)b)->top == NULL;
 }
 
 void stack_print(b_stack b) {
-  struct _stack *stack = b;
-  struct _node *node = stack->top;
+  struct stack_t *stack = b;
+  struct node_t *node = stack->top;
   printf("[");
   if (!stack_empty(b)) {
     while(node) {
