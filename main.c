@@ -7,31 +7,16 @@
 #include "stack.h"
 #include "queue.h"
 #include "tree.h"
+#include "big_int.h"
 
 int main(int argc, char **argv) {
  
-  // List Testing
-  b_list list = list_init();
-  list_add_front(list, '5');
-  list_add_front(list, 'G');
-  list_add_back(list,'B');
-  list_print(list);
-  list_reverse_ip(list);
-  list_print(list);
-
-  // Tree Testing
-  b_tree tree = tree_init();
-  tree_add(tree, '5');
-  tree_add(tree, '1');
-  tree_add(tree, '4');
-  tree_add(tree, '9');
-
-  printf("Tree Size: %d\n", tree_size(tree));
-  tree_print(tree);
-  printf("Removing '1'\n");
-  tree_remove(tree, '1');
-  tree_print(tree);
-  tree_free(tree);
+  big_int b = big_int_init();
+  big_int_insert(b, 30045);
+  big_int_print(b);
+  printf("Size: %d\n", big_int_digits(b));
+  big_int_reverse(b);
+  big_int_print(b);
 
   return 0;
 }
